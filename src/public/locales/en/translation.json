@@ -1,0 +1,10 @@
+{
+  "welcomeMessage": "<0>Rooted</0> in passion,",
+  "bikeLoversMessage": "Bikes created with passion for lovers of two wheels.",
+  "nav_about": "About",
+  "nav_bikes": "Bikes",
+  "nav_stories": "Stories",
+  "nav_view_all_categories": "View All Categories",
+  "user_greeting": "Hi, {{name}}!",
+  "user_logout": "Logout"
+}

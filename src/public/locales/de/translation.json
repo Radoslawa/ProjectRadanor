@@ -1,0 +1,10 @@
+{
+  "welcomeMessage": "<0>Rooted</0> in passion,",
+  "bikeLoversMessage": "Fahrräder, die mit Leidenschaft für Liebhaber von zwei Rädern entwickelt wurden.",
+  "nav_about": "Über uns",
+  "nav_bikes": "Fahrräder",
+  "nav_stories": "Geschichten",
+  "nav_view_all_categories": "Alle Kategorien anzeigen",
+  "user_greeting": "Hallo, {{name}}!",
+  "user_logout": "Ausloggen"
+}
