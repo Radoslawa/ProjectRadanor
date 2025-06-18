@@ -22,7 +22,7 @@ const CtaButtonStyled = styled.a`
   height: 60px;    
   padding: 0 0.75rem 0 1.5rem; 
   background-color: ${({ theme }) => theme.colors.white || '#fff'};
-  border-radius: 4rem; 
+  border-radius: 12px; 
   text-decoration: none;
   cursor: pointer;
   transition: transform 0.3s ease-out;
@@ -40,12 +40,12 @@ const CtaLabel = styled.span`
   
   color: ${({ theme }) => theme.colors.black || '#000'};
   font-family: ${({ theme }) => theme.fonts.main || '"PP Neue Montreal", sans-serif'};
-  font-size: 20px; 
+  font-size: 25px; 
   font-weight: 500;
   text-transform: uppercase;
   white-space: nowrap;
 
-  /* --- ZMIANA TUTAJ: Ustawienie line-height na 1 usuwa dodatkowe odstępy fontu --- */
+  /* ---  Ustawienie line-height na 1 usuwa dodatkowe odstępy fontu --- */
   line-height: 0.1;
 
   /* Stan początkowy dla animacji */
@@ -71,7 +71,7 @@ const CtaIconWrapper = styled.div`
   will-change: transform, opacity;
 `;
 
-const CtaButton = ({ animate, href = "#" }) => {
+const CtaButton = ({ animate, href = "/all-bikes" }) => {
   const gsap = window.gsap;
 
   const ctaWrapperRef = useRef(null); 
@@ -122,7 +122,7 @@ const CtaButton = ({ animate, href = "#" }) => {
     }
   }, [animate, gsap]);
 
-  // Usunięto children, ponieważ tekst jest teraz stały
+  
   return (
     <CtaWrapper ref={ctaWrapperRef}>
       <CtaButtonStyled href={href}>
@@ -134,4 +134,5 @@ const CtaButton = ({ animate, href = "#" }) => {
 };
 
 export default CtaButton;
+
 

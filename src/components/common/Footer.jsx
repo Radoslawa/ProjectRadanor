@@ -2,7 +2,7 @@
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-// import gsap from 'gsap'; // USUNIĘTO - będziemy używać window.gsap
+import { useTranslation } from 'react-i18next';
 
 const FooterWrapper = styled.footer`
   width: 100%;
@@ -16,7 +16,7 @@ const FooterWrapper = styled.footer`
   text-align: center;
   color: ${({ theme }) => theme.colors.textLight || '#ccc'};
   font-size: 0.9rem;
-  margin-top: auto; /* Kluczowe dla sticky footer, jeśli PageWrapper ma display:flex; flex-direction:column; min-height:100vh; */
+  margin-top: auto;
 
   opacity: 0;
   visibility: hidden;
@@ -73,9 +73,9 @@ const CopyrightNotice = styled.p`
   opacity: 0.8; 
 `;
 
-// Usunięto gsapInstance z propsów, showCounter, currentSlide, totalSlides
 const Footer = ({ animate }) => { 
-  const gsap = window.gsap; // Użyj globalnej instancji GSAP
+  const { t } = useTranslation();
+  const gsap = window.gsap;
   const footerRef = useRef(null);
 
   useEffect(() => {
@@ -92,16 +92,13 @@ const Footer = ({ animate }) => {
     const element = footerRef.current;
     if (element) {
       if (animate) { 
-        // console.log("[Footer.jsx] Animating IN with window.gsap");
         gsap.to(element, {
             opacity: 1,
             visibility: 'visible',
             y: '0%', 
             duration: 0.8,
             ease: 'power2.out',
-            // Opóźnienie, aby stopka pojawiła się jako ostatni element na stronie
-            // Powinno być większe niż opóźnienia Navbar, HeroSection, CtaButton
-            delay: 1.5 // Dostosuj ten delay
+            delay: 1.5 
         });
       } else if (sessionStorage.getItem('loaderAnimationComplete') === 'true') { 
          gsap.set(element, { opacity: 1, visibility: 'visible', y: '0%' });
@@ -109,22 +106,17 @@ const Footer = ({ animate }) => {
          gsap.set(element, { opacity: 0, visibility: 'hidden', y: '30px' });
       }
     }
-  }, [animate, gsap]); // Dodano gsap do zależności
-
-  if (typeof window !== "undefined" && !window.gsap && animate) {
-      console.error("[Footer.jsx] Cannot animate because window.gsap is not available.");
-      return null; 
-  }
+  }, [animate, gsap]);
 
   return (
     <FooterWrapper ref={footerRef}>
       <FooterLinks>
-        <Link to="/contact">Contact Us</Link> 
-        <Link to="/faq">FAQ</Link>
-        <Link to="/shipping-returns">Shipping & Returns</Link>
-        <Link to="/size-guide">Size Guide</Link>
-        <Link to="/privacy-policy">Privacy Policy</Link>
-        <Link to="/terms-of-service">Terms of Service</Link>
+        <Link to="/contact">{t('footer_contact')}</Link> 
+        <Link to="/faq">{t('footer_faq')}</Link>
+        <Link to="/shipping-returns">{t('footer_shipping')}</Link>
+        <Link to="/size-guide">{t('footer_size_guide')}</Link>
+        <Link to="/privacy-policy">{t('footer_privacy')}</Link>
+        <Link to="/terms-of-service">{t('footer_terms')}</Link>
       </FooterLinks>
       
       <SocialMediaIcons>
@@ -135,7 +127,7 @@ const Footer = ({ animate }) => {
       </SocialMediaIcons>
 
       <CopyrightNotice>
-        &copy; {new Date().getFullYear()} RadAnOr Bikes. Created by RadAnOr Team. All Rights Reserved.
+        © {new Date().getFullYear()} RadAnOr Bikes. Created by RadAnOr Team. All Rights Reserved.
         <br />
         Crafted with passion for two wheels.
       </CopyrightNotice>

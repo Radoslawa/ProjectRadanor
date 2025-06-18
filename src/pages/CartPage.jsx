@@ -195,7 +195,7 @@ const CheckoutButton = styled(Link)`
   font-weight: 500;
   font-family: ${({ theme }) => theme.fonts.main};
   text-transform: uppercase;
-  border-radius: 25px;
+  border-radius: 15px;
   cursor: pointer;
   text-decoration: none;
   transition: background-color 0.2s ease;

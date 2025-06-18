@@ -102,7 +102,7 @@ const SubmitButton = styled.button`
   font-size: 1rem;
   font-weight: 500;
   text-transform: uppercase;
-  border-radius: 25px;
+  border-radius: 15px;
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin-top: 1rem;

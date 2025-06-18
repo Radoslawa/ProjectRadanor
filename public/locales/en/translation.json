@@ -6,5 +6,24 @@
   "nav_stories": "Stories",
   "nav_view_all_categories": "View All Categories",
   "user_greeting": "Hi, {{name}}!",
-  "user_logout": "Logout"
+  "user_logout": "Logout",
+  "viewAllProducts": "View all products",
+  
+  "footer_contact": "Contact Us",
+  "footer_faq": "FAQ",
+  "footer_shipping": "Shipping & Returns",
+  "footer_privacy": "Privacy Policy",
+  "footer_terms": "Terms of Service",
+  "footer_size_guide": "Size Guide",
+  
+  "login_title": "I am a customer",
+  "login_email_label": "E-Mail Address",
+  "login_password_label": "Password",
+  "login_button": "Login",
+  "register_title": "I am new here",
+  "register_firstname_label": "First Name",
+  "register_lastname_label": "Last Name",
+  "register_button": "Create Account"
+
+
 }

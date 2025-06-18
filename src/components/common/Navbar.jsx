@@ -242,24 +242,28 @@ const Navbar = ({ animate, variant = 'dark' }) => {
         <Link to="/">RadAnOr</Link>
       </LogoContainer>
       
-      <NavLinksContainer className="nav-links-desktop">
-        <NavLinkItem $variant={variant}><Link to="/about">{t('nav_about')}</Link></NavLinkItem>
-        <NavLinkItem $variant={variant} onMouseEnter={handleBikesMouseEnter} onMouseLeave={handleBikesMouseLeave}>
-          <span>{t('nav_bikes')}</span> 
-          <DropdownMenu $isOpen={isBikesDropdownOpen} onMouseEnter={handleBikesMouseEnter} onMouseLeave={handleBikesMouseLeave}>
-            {bikeCategories.map(category => (
-              <DropdownMenuItem 
-                key={category.name}
-                to={`/bikes/${category.name.toLowerCase().replace(/\s+/g, '-')}`}
-                onClick={() => setIsBikesDropdownOpen(false)}
-              >
-                {category.name}
+    <NavLinksContainer className="nav-links-desktop">
+      <NavLinkItem $variant={variant}><Link to="/about">{t('nav_about')}</Link></NavLinkItem>
+      <NavLinkItem $variant={variant} onMouseEnter={handleBikesMouseEnter} onMouseLeave={handleBikesMouseLeave}>
+<Link to="/all-bikes">{t('nav_bikes')}</Link>
+         <DropdownMenu $isOpen={isBikesDropdownOpen} onMouseEnter={handleBikesMouseEnter} onMouseLeave={handleBikesMouseLeave}>
+          {bikeCategories.map(category => (
+            <DropdownMenuItem
+            key={category.name}
+            to={`/bikes/${category.name.toLowerCase().replace(/\s+/g, '-')}`}
+            onClick={() => setIsBikesDropdownOpen(false)}
+            >
+              {category.name}
               </DropdownMenuItem>
             ))}
             {bikeCategories.length > 0 && <DropdownMenuItem to="/all-bikes" onClick={() => setIsBikesDropdownOpen(false)} style={{borderTop: '1px solid #eee', fontWeight:'bold'}}>{t('nav_view_all_categories')}</DropdownMenuItem>}
+
           </DropdownMenu>
+
         </NavLinkItem>
+
         <NavLinkItem $variant={variant}><Link to="/stories">{t('nav_stories')}</Link></NavLinkItem>
+
       </NavLinksContainer>
       
       <NavActionsContainer className="nav-actions-container">

@@ -57,11 +57,11 @@ import racingImg1 from '../assets/images/img1.jpg';
 // Będziesz mogła dodać resztę później, gdy aplikacja będzie stabilna.
 export const allBikesData = [
   {
-    "id": 1,
-    "name": "Gravel Pathfinder Pro",
-    "category": "Gravel",
-    "mainImage": gravelHero,
-    "galleryImages": [gravelHero, gravelWhite, gravelWhite2, gravelWhite3],
+    id: 1,
+    name: "Gravel Pathfinder Pro",
+    category: "Gravel",
+    mainImage: gravelHero,
+    galleryImage: [gravelHero, gravelWhite, gravelWhite2, gravelWhite3],
     "description": "Discover unknown trails with the Gravel Pathfinder Pro. Designed for adventurers who aren't afraid to stray from the beaten path. This bike combines lightness, durability, and versatility to provide you with unforgettable experiences on every trip, regardless of the terrain.",
   "features": [
     "Ultra-light Monocoque carbon frame with Gravel Advanced geometry",
@@ -140,14 +140,14 @@ export const allBikesData = [
   ],
   "availableSizes": ["S", "M", "L", "XL"],
   "price": "7999.00",
-  "currency": "EURO"
+  "currency": "€"
 },
   {
-  "id": 2,
-  "name": "Gravel Explorer MKII",
-  "category": "Gravel",
-  "mainImage":  gravelGrayHero,
-  "galleryImages": [
+  id: 2,
+  name: "Gravel Explorer MKII",
+  category: "Gravel",
+  mainImage:  gravelGrayHero,
+  galleryImages: [
     gravelGrayHero, gravelGray1, gravelGray2, gravelGray3
   ],
   "description": "A reliable companion for every gravel adventure, ready for anything. The Gravel Explorer MKII is built for versatility and durability, whether you're commuting, exploring local trails, or embarking on longer bikepacking trips.",
@@ -225,7 +225,7 @@ export const allBikesData = [
   ],
   "availableSizes": ["S", "M", "L", "XL"],
   "price": "5999.00",
-  "currency": "EURO"
+  "currency": "€"
 },
 { // NOWY ROWER W KATEGORII GRAVEL
     id: 3, 
@@ -303,14 +303,14 @@ export const allBikesData = [
     ],
     "availableSizes": ["S", "M", "L", "XL"],
     "price": "5499.00",
-    "currency": "EURO"
+    "currency": "€"
   },
   {
-    "id": 4,
-    "name": "Mountain Apex Predator",
-    "category": "MTB",
-    "mainImage": mtbHero,
-    "galleryImages": [mtbHero, mtbOrange, mtbOrange2, mtbOrange3],
+    id: 4,
+    name: "Mountain Apex Predator",
+    category: "MTB",
+    mainImage: mtbHero,
+    galleryImages: [mtbHero, mtbOrange, mtbOrange2, mtbOrange3],
     "description": "Conquer any summit and dominate the descents with the MTB Apex Predator Pro. Engineered for the most demanding trails, this bike offers an unrivaled combination of agility, stability, and raw speed. Its progressive geometry and top-tier components will give you the confidence to push your limits on any terrain.",
     "features": [
     "Lightweight and durable full carbon frame with modern trail geometry",
@@ -379,7 +379,7 @@ export const allBikesData = [
   ],
   "availableSizes": ["S", "M", "L", "XL"],
   "price": "8499.00",
-  "currency": "EURO"
+  "currency": "€"
   },
   { 
     id: 5, 
@@ -457,7 +457,7 @@ export const allBikesData = [
   ],
   "availableSizes": ["S", "M", "L", "XL"],
   "price": "9299.00",
-  "currency": "EURO"
+  "currency": "€"
   },
    { 
     id: 6, 
@@ -535,7 +535,7 @@ export const allBikesData = [
   ],
   "availableSizes": ["S", "M", "L", "XL"],
   "price": "9999.00",
-  "currency": "EURO"
+  "currency": "€"
   },
 {
     id: 7,
@@ -629,7 +629,7 @@ export const allBikesData = [
   ],
  "availableSizes": ["S", "M", "L"],
   "price": "2999.00",
-  "currency": "EURO"
+  "currency": "€"
   },
    { 
     id: 8, 
@@ -715,7 +715,7 @@ export const allBikesData = [
   ],
   "availableSizes": ["S", "M", "L"],
   "price": "3499.00",
-  "currency": "EURO"
+  "currency": "€"
   },
     { 
     id: 9, 
@@ -803,7 +803,7 @@ export const allBikesData = [
   ],
   "availableSizes": ["S", "M", "L", "XL"],
   "price": "4299.00",
-  "currency": "EURO"
+  "currency": "€"
   },
   {
     id: 10,
@@ -888,7 +888,7 @@ export const allBikesData = [
   ],
   "availableSizes": ["49", "52", "54", "56", "58", "61"],
   "price": "11999.00",
-  "currency": "EURO"
+  "currency": "€"
   },
     { 
     id: 11, 
@@ -973,9 +973,10 @@ export const allBikesData = [
   ],
   "availableSizes": ["49", "52", "54", "56", "58", "61"],
   "price": "9999.00",
-  "currency": "EURO"
+  "currency": "€"
   },
     { 
+    id: 12,
     name: "Y3RS",
     category: "Racing", 
     mainImage: racingImg1,
@@ -1056,7 +1057,7 @@ export const allBikesData = [
   ],
   "availableSizes": ["49", "52", "54", "56", "58", "61"],
   "price": "11999.00",
-  "currency": "EURO"
+  "currency": "€"
   },
   {
     id: 13,
@@ -1153,7 +1154,7 @@ export const allBikesData = [
   ],
   "availableSizes": ["S", "M", "L"],
   "price": "3299.00",
-  "currency": "EURO "
+  "currency": "€"
   },
     { 
     id: 14, 
@@ -1249,7 +1250,7 @@ export const allBikesData = [
   ],
   "availableSizes": ["S", "M", "L", "XL"],
   "price": "3499.00",
-  "currency": "EURO"
+  "currency": "€"
   },
     { // NOWY ROWER W KATEGORII GRAVEL
     id: 15, 
@@ -1346,7 +1347,7 @@ export const allBikesData = [
   ],
   "availableSizes": ["S", "M", "L", "XL"],
   "price": "3499.00",
-  "currency": "EURO"
+  "currency": "€"
   },
    {
     id: 16, 
@@ -1433,7 +1434,7 @@ export const allBikesData = [
   ],
   "availableSizes": ["S", "M", "L", "XL"],
   "price": "5999.00",
-  "currency": "EURO"
+  "currency": "€"
 },
 {
    id: 17, 
@@ -1530,7 +1531,7 @@ export const allBikesData = [
   ],
   "availableSizes": ["S", "M", "L", "XL"],
   "price": "6499.00",
-  "currency": "EURO"
+  "currency": "€"
 },
 {
    id: 18, 
@@ -1616,10 +1617,8 @@ export const allBikesData = [
   ],
   "availableSizes": ["S", "M", "L", "XL"],
   "price": "4799.00",
-  "currency": "EURO"
+  "currency": "€"
 }
-
-
 
 ];
 

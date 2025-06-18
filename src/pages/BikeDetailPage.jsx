@@ -1,5 +1,5 @@
 // src/pages/BikeDetailPage.jsx
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
@@ -29,176 +29,257 @@ const MainContentDetail = styled.main`
 `;
 
 const ProductLayoutStyled = styled.div`
-  max-width: 1200px; 
+  max-width: 1200px;
   margin: 2rem auto;
   padding: 0 1rem;
-  display: grid; 
+  display: grid;
   grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-  grid-template-areas: "mainimage info" "gallery   info" "specs     specs";
+  grid-template-areas:
+    "mainimage info"
+    "gallery   info"
+    "specs     specs";
   gap: 2rem 3rem;
   @media (max-width: ${({ theme }) => theme.breakpoints.laptopS || '900px'}) {
     grid-template-columns: 1fr;
-    grid-template-areas: "mainimage" "gallery" "info" "specs";
+    grid-template-areas:
+      "mainimage"
+      "gallery"
+      "info"
+      "specs";
     gap: 1.5rem;
   }
 `;
 
 const MainImageContainerStyled = styled.div`
-  grid-area: mainimage; 
+  grid-area: mainimage;
   width: 100%;
-  border-radius: 8px; 
+  border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   cursor: zoom-in;
   background-color: #fff;
-  
+
   img {
-    width: 100%; 
-    height: 100%; /* Zmieniono z auto */
-    display: block; 
-    aspect-ratio: 4/3; 
-    object-fit: cover; /* POPRAWKA: Powrót do 'cover' */
-    transition: opacity 0.3s ease-in-out; 
+    width: 100%;
+    height: 100%; /* Changed from auto */
+    display: block;
+    aspect-ratio: 4/3;
+    object-fit: cover; /* Reverted to cover for aesthetics */
+    transition: opacity 0.3s ease-in-out;
   }
 `;
 
 const GalleryContainerStyled = styled.div`
-  grid-area: gallery; 
-  display: flex; 
-  flex-wrap: wrap; 
+  grid-area: gallery;
+  display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   
   img {
-    width: 100px; 
-    height: 75px; 
-    object-fit: cover; /* POPRAWKA: Powrót do 'cover' */
+    width: 100px;
+    height: 75px;
+    object-fit: cover; /* Reverted to cover for aesthetics */
     border-radius: 6px;
-    cursor: pointer; 
+    cursor: pointer;
     border: 3px solid transparent;
     transition: all 0.2s ease;
     background-color: #fff;
 
-    &:hover { 
-      border-color: ${({ theme }) => theme.colors.primary || '#0a0a0a'}; 
-      transform: scale(1.05); 
+    &:hover {
+      border-color: ${({ theme }) => theme.colors.primary || '#0a0a0a'};
+      transform: scale(1.05);
     }
-    &.active-thumbnail { 
-      border-color: ${({ theme }) => theme.colors.primary || '#0a0a0a'}; 
-      box-shadow: 0 0 10px rgba(0,0,0,0.2); 
-      transform: scale(1.05); 
+    &.active-thumbnail {
+      border-color: ${({ theme }) => theme.colors.primary || '#0a0a0a'};
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transform: scale(1.05);
     }
   }
 `;
 
-const InfoContainerStyled = styled.div` grid-area: info; display: flex; flex-direction: column; `;
-const BikeTypeStyledP = styled.p`
-  font-size: 0.9rem; color: ${({ theme }) => theme.colors.darkGrey || '#555'};
-  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.25rem;
+const InfoContainerStyled = styled.div`
+  grid-area: info;
+  display: flex;
+  flex-direction: column;
 `;
+
+const BikeTypeStyledP = styled.p`
+  font-size: 0.9rem;
+  color: ${({ theme }) => theme.colors.darkGrey || '#555'};
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.25rem;
+`;
+
 const BikeNameStyledH1 = styled.h1`
-  font-size: clamp(1.8rem, 4vw, 2.5rem); 
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
   font-family: ${({ theme }) => theme.fonts.main};
   font-weight: 600;
   color: ${({ theme }) => theme.colors.black || '#222'};
   margin-bottom: 0.75rem;
-  line-height: 1.2; text-align: left;
+  line-height: 1.2;
+  text-align: left;
 `;
+
 const BikePriceStyledP = styled.p`
-  font-size: clamp(1.5rem, 3vw, 2rem); 
+  font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 700;
   font-family: ${({ theme }) => theme.fonts.main};
-  color: ${({ theme }) => theme.colors.primary || '#0a0a0a'}; 
+  color: ${({ theme }) => theme.colors.primary || '#0a0a0a'};
   margin-bottom: 1.5rem;
 `;
+
 const BikeDescriptionStyledP = styled.p`
-  font-size: 1rem; 
+  font-size: 1rem;
   font-family: ${({ theme }) => theme.fonts.main};
-  line-height: 1.7; 
-  color: #333; 
+  line-height: 1.7;
+  color: #333;
   margin-bottom: 1.5rem;
 `;
+
 const FeaturesSectionStyled = styled.div`
   margin-bottom: 1.5rem;
-  h3 { font-size: 1.1rem; 
-  font-weight: 600; 
-  margin-bottom: 0.75rem;
-       color: ${({ theme }) => theme.colors.black || '#222'}; 
-       border-bottom: 1px solid ${({ theme }) => theme.colors.grey || '#ddd'};
-       padding-bottom: 0.25rem;  
-       text-align: left; }
-  ul { list-style: none; 
-  padding-left: 0;
-    li { font-size: 0.95rem; 
-    margin-bottom: 0.5rem; 
-    color: ${({ theme }) => theme.colors.darkGrey || '#555'};
-         position: relative; 
-         padding-left: 20px;
-      &::before { content: '✓'; 
-      color: ${({ theme }) => theme.colors.primary || '#0a0a0a'};
-                   position: absolute; 
-                   left: 0; 
-                   font-weight: bold; }
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: ${({ theme }) => theme.colors.black || '#222'};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.grey || '#ddd'};
+    padding-bottom: 0.25rem;
+    text-align: left;
+  }
+  ul {
+    list-style: none;
+    padding-left: 0;
+    li {
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      color: ${({ theme }) => theme.colors.darkGrey || '#555'};
+      position: relative;
+      padding-left: 20px;
+      &::before {
+        content: '✓';
+        color: ${({ theme }) => theme.colors.primary || '#0a0a0a'};
+        position: absolute;
+        left: 0;
+        font-weight: bold;
+      }
     }
   }
 `;
+
 const SizeSelectorWrapper = styled.div`
-  margin-top: 1.5rem; margin-bottom: 1rem;
-  label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: ${({ theme }) => theme.colors.darkGrey || '#555'}; }
-  div { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: ${({ theme }) => theme.colors.darkGrey || '#555'};
+  }
+  div {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
 `;
+
 const SizeButton = styled.button`
-  padding: 0.5em 1em; font-size: 0.9rem; font-weight: 500;
+  padding: 0.5em 1em;
+  font-size: 0.9rem;
+  font-weight: 500;
   border: 1px solid ${({ theme, $isActive }) => $isActive ? (theme.colors.primary || '#0a0a0a') : (theme.colors.grey || '#ccc')};
   background-color: ${({ theme, $isActive }) => $isActive ? (theme.colors.primary || '#0a0a0a') : (theme.colors.white || '#fff')};
   color: ${({ theme, $isActive }) => $isActive ? (theme.colors.white || '#fff') : (theme.colors.black || '#000')};
-  border-radius: 4px; cursor: pointer; transition: all 0.2s ease;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
   &:hover:not(:disabled) {
     border-color: ${({ theme }) => theme.colors.primary || '#0a0a0a'};
     background-color: ${({ theme, $isActive }) => $isActive ? (theme.colors.primary || '#0a0a0a') : (theme.colors.accent || '#f0f0f0')};
   }
-  &:disabled { cursor: not-allowed; opacity: 0.7; }
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
 `;
+
 const AddToCartButtonStyled = styled.button`
   background-color: ${({ theme }) => theme.colors.primary || '#0a0a0a'};
-  color: ${({ theme }) => theme.colors.white || '#fff'}; border: none;
-  padding: 0.9em 1.8em; font-size: 1rem; font-weight: 500;
-  text-transform: uppercase; border-radius: 25px; cursor: pointer;
+  color: ${({ theme }) => theme.colors.white || '#fff'};
+  border: none;
+  padding: 0.9em 1.8em;
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  border-radius: 25px;
+  cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  margin-top: 1.5rem; margin-bottom: 1.5rem; align-self: flex-start;
-  &:hover { background-color: ${({ theme }) => theme.colors.secondary || '#303030'}; transform: translateY(-2px); }
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  align-self: flex-start;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.secondary || '#303030'};
+    transform: translateY(-2px);
+  }
 `;
+
 const SpecificationsSectionStyled = styled.div`
-  grid-area: specs; padding: 2rem 0;
-  border-top: 1px solid ${({ theme }) => theme.colors.grey || '#ddd'}; margin-top: 1rem;
-  h3 { font-size: 1.8rem; color: ${({ theme }) => theme.colors.black || '#222'};
-       margin-bottom: 1.5rem; text-align: left; padding-bottom: 0.5rem;
-       border-bottom: 2px solid ${({ theme }) => theme.colors.primary || '#0a0a0a'};
-       display: inline-block; }
+  grid-area: specs;
+  padding: 2rem 0;
+  border-top: 1px solid ${({ theme }) => theme.colors.grey || '#ddd'};
+  margin-top: 1rem;
+  h3 {
+    font-size: 1.8rem;
+    color: ${({ theme }) => theme.colors.black || '#222'};
+    margin-bottom: 1.5rem;
+    text-align: left;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid ${({ theme }) => theme.colors.primary || '#0a0a0a'};
+    display: inline-block;
+  }
 `;
+
 const SpecGroupStyled = styled.div`
   margin-bottom: 2rem;
-  h4 { 
-    font-size: 1.2rem; font-weight: 600;
+  h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
     color: ${({ theme }) => theme.colors.primary || '#0a0a0a'};
-    margin-bottom: 1rem; padding-bottom: 0.25rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.25rem;
     border-bottom: 1px dashed ${({ theme }) => theme.colors.grey || '#ccc'};
   }
 `;
+
 const SpecTableStyled = styled.table`
-  width: 100%; border-collapse: collapse; font-size: 0.95rem;
-  th, td { 
-    text-align: left; padding: 0.8em 0.5em; 
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  th, td {
+    text-align: left;
+    padding: 0.8em 0.5em;
     border-bottom: 1px solid ${({ theme }) => theme.colors.grey || '#eee'};
-    vertical-align: top; 
+    vertical-align: top;
   }
-  tr:last-child th, tr:last-child td { border-bottom: none; }
-  th { color: ${({ theme }) => theme.colors.darkGrey || '#555'}; font-weight: 600; width: 35%; }
-  td { color: ${({ theme }) => theme.colors.black || '#333'}; }
+  tr:last-child th,
+  tr:last-child td {
+    border-bottom: none;
+  }
+  th {
+    color: ${({ theme }) => theme.colors.darkGrey || '#555'};
+    font-weight: 600;
+    width: 35%;
+  }
+  td {
+    color: ${({ theme }) => theme.colors.black || '#333'};
+  }
 `;
 
-// --- Nowe, Uproszczone Style dla Lightboxa ---
+// --- Lightbox Styles ---
 const fadeIn = keyframes`from { opacity: 0; } to { opacity: 1; }`;
-const scaleIn = keyframes`from { transform: scale(0.95); } to { transform: scale(1); }`;
+
 
 const LightboxOverlay = styled.div`
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -209,46 +290,52 @@ const LightboxOverlay = styled.div`
 `;
 
 const LightboxContent = styled.div`
-  position: relative; /* Potrzebne do pozycjonowania przycisku zamknięcia */
-  max-width: 90vw;
-  max-height: 90vh;
-  animation: ${scaleIn} 0.3s ease-out;
+  position: relative;
+  width: 90vw;
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  cursor: grab;
+  &:active { cursor: grabbing; }
   
   img {
-    display: block;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
+    max-width: none;
+    height: 100%;
+    width: auto;
+    transform: scale(${props => props.$zoom}) translate(${props => props.$panX}px, ${props => props.$panY}px);
+    transition: transform 0.2s ease-out;
     border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   }
 `;
 
 const CloseButton = styled.button`
-  position: absolute;
-  top: -15px;
-  right: -15px;
-  width: 40px;
-  height: 40px;
-  background: white;
-  border: none;
+  position: fixed; /* Pozycjonowanie względem okna przeglądarki */
+  top: 1rem;
+  right: 1.5rem;
+  width: 44px;
+  height: 44px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   font-size: 1.5rem;
   font-weight: bold;
-  color: black;
+  color: white;
   cursor: pointer;
-  z-index: 10;
+  z-index: 2001;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, background-color 0.2s ease;
   
   &:hover {
     transform: scale(1.1);
+    background-color: rgba(0, 0, 0, 0.6);
   }
 `;
 
+// --- Component ---
 const BikeDetailPage = ({ isAppReady }) => {
   const gsap = window.gsap;
   const pageWrapperRef = useRef(null);
@@ -262,6 +349,60 @@ const BikeDetailPage = ({ isAppReady }) => {
   const [selectedSize, setSelectedSize] = useState(null);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const isPanning = useRef(false);
+  const lastPanPoint = useRef({ x: 0, y: 0 });
+
+  const handleZoom = useCallback((event) => {
+    event.stopPropagation();
+    const newZoom = zoom - event.deltaY * 0.001;
+    setZoom(Math.min(Math.max(newZoom, 1), 3)); 
+  }, [zoom]);
+
+  const handlePanStart = useCallback((event) => {
+    event.preventDefault();
+    isPanning.current = true;
+    const x = event.touches ? event.touches[0].clientX : event.clientX;
+    const y = event.touches ? event.touches[0].clientY : event.clientY;
+    lastPanPoint.current = { x, y };
+  }, []);
+
+  const handlePanMove = useCallback((event) => {
+    if (!isPanning.current) return;
+    const x = event.touches ? event.touches[0].clientX : event.clientX;
+    const y = event.touches ? event.touches[0].clientY : event.clientY;
+    const dx = (x - lastPanPoint.current.x) / zoom;
+    const dy = (y - lastPanPoint.current.y) / zoom;
+    setPan(prev => ({ x: prev.x + dx, y: prev.y + dy }));
+    lastPanPoint.current = { x, y };
+  }, [zoom]);
+
+  const handlePanEnd = useCallback(() => { isPanning.current = false; }, []);
+  
+  useEffect(() => {
+    if (isLightboxOpen) {
+      const panMove = (e) => handlePanMove(e);
+      const panEnd = () => handlePanEnd();
+      window.addEventListener('mousemove', panMove);
+      window.addEventListener('mouseup', panEnd);
+      window.addEventListener('touchmove', panMove, { passive: false });
+      window.addEventListener('touchend', panEnd);
+      return () => {
+        window.removeEventListener('mousemove', panMove);
+        window.removeEventListener('mouseup', panEnd);
+        window.removeEventListener('touchmove', panMove);
+        window.removeEventListener('touchend', panEnd);
+      };
+    }
+  }, [isLightboxOpen, handlePanMove, handlePanEnd]);
+
+  const openLightbox = () => {
+    setZoom(1);
+    setPan({ x: 0, y: 0 });
+    setIsLightboxOpen(true);
+  };
+  
   useEffect(() => {
     if (bike) {
       setCurrentMainImage(bike.mainImage || null);
@@ -304,7 +445,7 @@ const BikeDetailPage = ({ isAppReady }) => {
   }, [isAppReady, gsap, bikeId]); 
 
   const handleAddToCart = () => {
-    if (bike && bike.availableSizes && bike.availableSizes.length > 0 && !selectedSize) {
+    if (bike && bike.availableSizes && !selectedSize) {
         alert("Please select a size before adding to cart.");
       return;
     }
@@ -332,7 +473,7 @@ const BikeDetailPage = ({ isAppReady }) => {
       <Navbar animate={isAppReady} variant="light"/>
       <MainContentDetail>
         <ProductLayoutStyled>
-            <MainImageContainerStyled onClick={() => setIsLightboxOpen(true)}>
+            <MainImageContainerStyled onClick={openLightbox}>
               {currentMainImage && <img ref={mainImageRef} src={currentMainImage} alt={bike.name} />}
             </MainImageContainerStyled>
             <GalleryContainerStyled>
@@ -386,8 +527,13 @@ const BikeDetailPage = ({ isAppReady }) => {
 
       {isLightboxOpen && (
         <LightboxOverlay onClick={() => setIsLightboxOpen(false)}>
-          <LightboxContent onClick={(e) => e.stopPropagation()}>
-            <CloseButton onClick={() => setIsLightboxOpen(false)}>&times;</CloseButton>
+          <CloseButton onClick={() => setIsLightboxOpen(false)}>&times;</CloseButton>
+          <LightboxContent 
+            $zoom={zoom} $panX={pan.x} $panY={pan.y} 
+            onWheel={handleZoom}
+            onMouseDown={handlePanStart} onTouchStart={handlePanStart}
+            onClick={(e) => e.stopPropagation()}
+          >
             <img src={currentMainImage} alt="Enlarged bike view" />
           </LightboxContent>
         </LightboxOverlay>

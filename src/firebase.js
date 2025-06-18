@@ -3,22 +3,16 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// TWOJA UNIKALNA KONFIGURACJA Z FIREBASE
 const firebaseConfig = {
-  apiKey: "AIzaSyBMhCqdyPozFiCy3ACf-3vgoY8cbQ5YM8g",
-  authDomain: "homepage3-project.firebaseapp.com",
-  projectId: "homepage3-project",
-  storageBucket: "homepage3-project.firebasestorage.app", 
-  messagingSenderId: "790953605627",
-  appId: "1:790953605627:web:523842e7d769e0c5e6335e"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
-
-// Inicjalizacja Firebase
 const app = initializeApp(firebaseConfig);
-
-// Inicjalizacja i eksport usług
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-
 export default app;

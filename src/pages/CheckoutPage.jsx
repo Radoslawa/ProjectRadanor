@@ -147,7 +147,7 @@ const PlaceOrderButton = styled.button`
   font-size: 1rem;
   font-weight: 500;
   text-transform: uppercase;
-  border-radius: 25px;
+  border-radius: 15px;
   cursor: pointer;
   margin-top: 1.5rem;
   transition: background-color 0.3s ease, opacity 0.3s ease;

@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTranslation } from 'react-i18next'; // Import jest już tutaj
+
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 
-// --- Styled Components ---
+// --- Styled Components (bez zmian) ---
 const LoginPageWrapper = styled.div`
   width: 100%;
   min-height: 100vh;
@@ -39,7 +41,6 @@ const FormColumn = styled.div`
 `;
 const FormTitle = styled.h2`
   font-size: 1.8rem;
-  font-family: ${({ theme }) => theme.fonts.main};
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -151,8 +152,10 @@ const RequirementText = styled.p`
   margin-top: 0.25rem;
   margin-left: 0.25rem;
 `;
+// --- Koniec Styled Components ---
 
 const LoginPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { register, login } = useAuth();
   const [error, setError] = useState('');
@@ -161,7 +164,7 @@ const LoginPage = () => {
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [registerData, setRegisterData] = useState({
     firstName: '', lastName: '', email: '', password: '',
-    street: '', city: '', postalCode: '', country: '' 
+    street: '', city: '', postalCode: '', country: ''
   });
 
   const [showLoginPassword, setShowLoginPassword] = useState(false);
@@ -220,15 +223,15 @@ const LoginPage = () => {
       <MainContent>
         <FormContainer>
           <FormColumn>
-            <FormTitle>I am a customer</FormTitle>
+            <FormTitle>{t('login_title')}</FormTitle>
             {error && <ErrorMessage>{error}</ErrorMessage>}
             <Form onSubmit={handleLoginSubmit}>
               <InputGroup>
-                <Label htmlFor="login-email" className="required">E-Mail Address</Label>
+                <Label htmlFor="login-email" className="required">{t('login_email_label')}</Label>
                 <Input type="email" id="login-email" required value={loginData.email} onChange={(e) => handleChange(e, 'login')} />
               </InputGroup>
               <InputGroup>
-                <Label htmlFor="login-password" className="required">Password</Label>
+                <Label htmlFor="login-password" className="required">{t('login_password_label')}</Label>
                 <PasswordInputWrapper>
                   <Input type={showLoginPassword ? 'text' : 'password'} id="login-password" required value={loginData.password} onChange={(e) => handleChange(e, 'login')} />
                   <PasswordToggleIcon onClick={() => setShowLoginPassword(!showLoginPassword)}>
@@ -236,26 +239,24 @@ const LoginPage = () => {
                   </PasswordToggleIcon>
                 </PasswordInputWrapper>
               </InputGroup>
-              <SubmitButton type="submit" disabled={loading}>Login</SubmitButton>
+              <SubmitButton type="submit" disabled={loading}>{t('login_button')}</SubmitButton>
             </Form>
           </FormColumn>
           <FormColumn>
-            <FormTitle>I am new here</FormTitle>
+            <FormTitle>{t('register_title')}</FormTitle>
             <Form onSubmit={handleRegisterSubmit}>
               <InputGroup>
-                <Label htmlFor="reg-firstname" className="required">First Name</Label>
+                <Label htmlFor="reg-firstname" className="required">{t('register_firstname_label')}</Label>
                 <Input type="text" id="reg-firstname" required value={registerData.firstName} onChange={(e) => handleChange(e, 'register')} />
               </InputGroup>
               <InputGroup>
-                <Label htmlFor="reg-lastname" className="required">Last Name</Label>
+                <Label htmlFor="reg-lastname" className="required">{t('register_lastname_label')}</Label>
                 <Input type="text" id="reg-lastname" required value={registerData.lastName} onChange={(e) => handleChange(e, 'register')} />
               </InputGroup>
               <InputGroup>
-                <Label htmlFor="reg-email" className="required">E-Mail Address</Label>
+                <Label htmlFor="reg-email" className="required">{t('login_email_label')}</Label>
                 <Input type="email" id="reg-email" required value={registerData.email} onChange={(e) => handleChange(e, 'register')} />
               </InputGroup>
-              
-              {/* --- DODANE POLA ADRESU --- */}
               <InputGroup>
                 <Label htmlFor="reg-street">Street & House Number</Label>
                 <Input type="text" id="reg-street" value={registerData.street} onChange={(e) => handleChange(e, 'register')} />
@@ -272,9 +273,8 @@ const LoginPage = () => {
                 <Label htmlFor="reg-country">Country</Label>
                 <Input type="text" id="reg-country" value={registerData.country} onChange={(e) => handleChange(e, 'register')} />
               </InputGroup>
-              
               <InputGroup>
-                <Label htmlFor="reg-password" className="required">Password</Label>
+                <Label htmlFor="reg-password" className="required">{t('login_password_label')}</Label>
                 <PasswordInputWrapper>
                   <Input 
                     type={showRegisterPassword ? 'text' : 'password'}
@@ -292,7 +292,7 @@ const LoginPage = () => {
               </InputGroup>
               <Subtext>By creating an account, you agree to our Terms & Conditions and Privacy Policy.</Subtext>
               <RequirementText>* Required fields</RequirementText>
-              <SubmitButton type="submit" disabled={loading}>Create Account</SubmitButton>
+              <SubmitButton type="submit" disabled={loading}>{t('register_button')}</SubmitButton>
             </Form>
           </FormColumn>
         </FormContainer>
@@ -301,5 +301,4 @@ const LoginPage = () => {
     </LoginPageWrapper>
   );
 };
-
 export default LoginPage;

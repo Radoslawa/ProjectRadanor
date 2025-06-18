@@ -125,5 +125,3 @@ const LoaderOverlay = ({ onLoaded }) => {
 };
 
 export default LoaderOverlay;
-
-
