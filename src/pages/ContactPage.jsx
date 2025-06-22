@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next'; 
 
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
@@ -125,13 +126,13 @@ const ContactInfo = styled.div`
   }
 `;
 
-// --- Styled Components dla Modala (z poprawioną animacją) ---
+
 const fadeIn = keyframes`
   from { opacity: 0; }
   to { opacity: 1; }
 `;
 
-// POPRAWIONA ANIMACJA: Usunięto translate, zostawiono tylko scale i opacity
+
 const scaleIn = keyframes`
   from { transform: scale(0.9); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
@@ -193,10 +194,11 @@ const CloseButton = styled.button`
 `;
 
 const ContactPage = () => {
+   const { t } = useTranslation();
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false); // Stan do obsługi ładowania
-  const [error, setError] = useState(''); // Stan do obsługi błędów
+  const [loading, setLoading] = useState(false); 
+  const [error, setError] = useState(''); 
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -207,18 +209,18 @@ const ContactPage = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-   // Stwórz nowy obiekt wiadomości z dodatkową datą
+  
     const newMessage = {
       ...formData,
-      createdAt: serverTimestamp(), // Dodaje datę utworzenia po stronie serwera
-      read: false, // Opcjonalny status, czy wiadomość została przeczytana
+      createdAt: serverTimestamp(), 
+      read: false, 
     };
     try {
-      // Dodaj nowy dokument do kolekcji 'messages' w Firestore
+     
       const docRef = await addDoc(collection(db, "messages"), newMessage);
       console.log("Message sent with ID: ", docRef.id);
-      setIsSubmitted(true); // Pokaż modal sukcesu
-      setFormData({ name: '', email: '', message: '' }); // Wyczyść formularz
+      setIsSubmitted(true); 
+      setFormData({ name: '', email: '', message: '' }); 
     } catch (err) {
       console.error("Error sending message: ", err);
       setError("Sorry, something went wrong. Please try again later.");
@@ -237,33 +239,33 @@ return (
       <Navbar animate={true} variant="light" />
       <MainContent>
         <Section>
-          <SectionTitle>Send Us a Message</SectionTitle>
+          <SectionTitle>{t('contact_form_title')}</SectionTitle>
           <ContactForm onSubmit={handleSubmit}>
             <InputGroup>
-              <Label htmlFor="name">Your Name</Label>
+              <Label htmlFor="name">{t('contact_form_name_label')}</Label>
               <Input type="text" id="name" required value={formData.name} onChange={handleChange} />
             </InputGroup>
             <InputGroup>
-              <Label htmlFor="email">Your Email</Label>
+              <Label htmlFor="email">{t('contact_form_email_label')}</Label>
               <Input type="email" id="email" required value={formData.email} onChange={handleChange} />
             </InputGroup>
             <InputGroup>
-              <Label htmlFor="message">Your Message</Label>
+              <Label htmlFor="message">{t('contact_form_message_label')}</Label>
               <Textarea id="message" required value={formData.message} onChange={handleChange}></Textarea>
             </InputGroup>
             <SubmitButton type="submit" disabled={loading}>
-              {loading ? 'Sending...' : 'Send Message'}
+              {loading ? t('contact_form_sending_button') : t('contact_form_send_button')}
             </SubmitButton>
             {error && <p style={{color: 'red', marginTop: '1rem'}}>{error}</p>}
           </ContactForm>
         </Section>
         <Section>
-          <SectionTitle>Contact Information</SectionTitle>
+          <SectionTitle>{t('contact_info_title')}</SectionTitle>
           <ContactInfo>
-            <p><strong>Address:</strong><br />123 Bike Lane, Cycle City, 12345, Germany</p>
-            <p><strong>Phone:</strong><br />+49 (0) 123 456 7890</p>
+            <p><strong>{t('contact_info_address_label')}</strong><br />{t('contact_info_address_value')}</p>
+            <p><strong>{t('contact_info_phone_label')}</strong><br />+49 (0) 123 456 7890</p>
             <p><strong>Email:</strong><br />contact@radanor.bike</p>
-            <p><strong>Business Hours:</strong><br />Monday - Friday: 9:00 AM - 6:00 PM</p>
+            <p><strong>{t('contact_info_hours_label')}</strong><br />{t('contact_info_hours_value')}</p>
           </ContactInfo>
         </Section>
       </MainContent>
@@ -272,11 +274,9 @@ return (
       {isSubmitted && (
         <ModalOverlay onClick={closeModal}>
           <ModalContent onClick={(e) => e.stopPropagation()}>
-            <ModalTitle>Message Sent!</ModalTitle>
-            <ModalMessage>
-              Thank you for your message! We will get back to you shortly.
-            </ModalMessage>
-            <CloseButton onClick={closeModal}>Close</CloseButton>
+            <ModalTitle>{t('contact_modal_success_title')}</ModalTitle>
+            <ModalMessage>{t('contact_modal_success_message')}</ModalMessage>
+            <CloseButton onClick={closeModal}>{t('contact_modal_close_button')}</CloseButton>
           </ModalContent>
         </ModalOverlay>
       )}
@@ -285,5 +285,3 @@ return (
 };
 
 export default ContactPage;
-
-

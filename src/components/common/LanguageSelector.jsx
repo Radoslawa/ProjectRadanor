@@ -1,5 +1,5 @@
 // src/components/common/LanguageSelector.jsx
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next'; 
 
@@ -23,7 +23,7 @@ const LanguageSelectorButton = styled.button`
   cursor: pointer;
   display: flex;
   align-items: center;
-  min-width: 110px; /* Zwiększono, aby zmieścić "Deutsch" */
+  min-width: 110px; 
   justify-content: space-between;
   font-size: 14px;
   font-weight: 500;
@@ -35,7 +35,7 @@ const LanguageSelectorButton = styled.button`
   }
 `;
 const CurrentLangFlag = styled.span`
-  margin-right: 8px; /* Zwiększono odstęp */
+  margin-right: 8px; 
   font-size: 1.1em;
   line-height: 1;
 `;
@@ -85,15 +85,19 @@ const LanguageDropdownItem = styled.li`
 `;
 
 const LanguageSelector = () => {
-  const { i18n } = useTranslation(); // <-- Użyj hooka do pobrania instancji i18n
+  const { i18n } = useTranslation(); 
   const [isOpen, setIsOpen] = useState(false);
   const buttonRef = useRef(null);
   const dropdownRef = useRef(null);
 
-  const languages = useMemo(() => [
-    { code: 'en', name: 'English', flag: '🇬🇧' },
-    { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-  ], []);
+ const languages = [
+    { code: 'en', name: '🇬🇧 EN' },
+    { code: 'de', name: '🇩🇪 DE' },
+    { code: 'fr', name: '🇫🇷 FR' },
+    { code: 'es', name: '🇪🇸 ES' },
+   
+    { code: 'pl', name: '🇵🇱 PL' }
+  ];
 
   // Funkcja do zmiany języka
   const handleSelectLanguage = (langCode) => {

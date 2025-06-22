@@ -2,9 +2,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next'; 
 
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
+
+// --- Styled Components  ---
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -23,17 +26,29 @@ const MainContent = styled.main`
   padding: 120px 2rem 4rem;
   text-align: center;
   color: ${({ theme }) => theme.colors.black || '#000'};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tabletS || '768px'}) {
+    padding: 100px 1rem 2rem; 
+  }
 `;
 
 const SuccessIcon = styled.div`
   font-size: 4rem;
-  color: #28a745; /* Zielony kolor sukcesu */
+  color: #28a745; 
   margin-bottom: 1.5rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tabletS || '768px'}) {
+    font-size: 3rem;
+  }
 `;
 
 const Title = styled.h1`
   font-size: 2.5rem;
   margin-bottom: 1rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tabletS || '768px'}) {
+    font-size: 2rem; 
+  }
 `;
 
 const Message = styled.p`
@@ -41,6 +56,11 @@ const Message = styled.p`
   margin-bottom: 0.5rem;
   max-width: 500px;
   line-height: 1.6;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tabletS || '768px'}) {
+    font-size: 1rem; 
+    max-width: 90%; 
+  }
 `;
 
 const StyledLink = styled(Link)`
@@ -57,26 +77,30 @@ const StyledLink = styled(Link)`
   &:hover {
     background-color: ${({ theme }) => theme.colors.secondary || '#303030'};
   }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tabletS || '768px'}) {
+    padding: 0.7em 1.5em; 
+    font-size: 0.95rem;
+  }
 `;
 
+// --- Komponent ---
+
 const OrderSuccessPage = () => {
+  const { t } = useTranslation();
+
   return (
     <PageWrapper>
-      <Navbar animate={true} />
+      <Navbar animate={true} variant="light" />
       <MainContent>
         <SuccessIcon>
           <i className="fas fa-check-circle"></i>
         </SuccessIcon>
-        <Title>Thank You For Your Order!</Title>
-        <Message>
-          Your purchase was successful. We are now preparing your shipment.
-        </Message>
-     
-        We have sent the exact shipment details to the provided email address.
-        <Message>
-          The package will be sent to the provided address. You can expect delivery within approximately **6-8 business days**.
-        </Message>
-        <StyledLink to="/">Back to Homepage</StyledLink>
+        <Title>{t('order_success_title', 'Thank you for your order!')}</Title>
+        <Message>{t('order_success_subtitle', 'Your order has been placed successfully.')}</Message>
+        <Message>{t('order_success_message', 'You will receive an email confirmation shortly.')}</Message>
+        <StyledLink to="/account/orders">{t('order_success_track_button', 'Track Your Order')}</StyledLink>
+        <StyledLink to="/" style={{marginLeft: '1rem', backgroundColor: '#6c757d'}}>{t('order_success_home_button', 'Back to Homepage')}</StyledLink>
       </MainContent>
       <Footer animate={true} />
     </PageWrapper>

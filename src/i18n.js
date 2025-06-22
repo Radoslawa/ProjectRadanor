@@ -13,7 +13,7 @@ i18n
   .use(initReactI18next)
   .init({
     // Języki, które wspieramy
-    supportedLngs: ['en', 'de'],
+    supportedLngs: ['en', 'de', 'fr', 'es', 'pl'],
     // Język domyślny, jeśli wykryty język nie jest wspierany
     fallbackLng: 'en',
     // Opcje dla backendu (skąd ładować pliki .json)

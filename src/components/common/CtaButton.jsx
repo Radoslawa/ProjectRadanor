@@ -1,6 +1,8 @@
 // src/components/common/CtaButton.jsx
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom'; 
+import { useTranslation } from 'react-i18next';
 
 const CtaWrapper = styled.div`
   display: flex;
@@ -12,21 +14,22 @@ const CtaWrapper = styled.div`
   will-change: transform, opacity;
 `;
 
-const CtaButtonStyled = styled.a`
+
+const CtaButtonStyled = styled(Link)`
   display: inline-flex; 
-  align-items: center;
-  justify-content: space-between; 
+  align-items: center; 
+  justify-content: center;
   width: auto; 
   min-width: 280px;
-  max-width: clamp(280px, 50%, 450px); 
+  max-width: clamp(280px, 50%, 450px);
   height: 60px;    
-  padding: 0 0.75rem 0 1.5rem; 
+  padding: 0 0.75rem 0 1.5rem;
   background-color: ${({ theme }) => theme.colors.white || '#fff'};
-  border-radius: 12px; 
   text-decoration: none;
   cursor: pointer;
   transition: transform 0.3s ease-out;
   position: relative; 
+  border-radius: 12px; 
 
   &:hover {
     transform: translateY(-2px) scale(1.02);
@@ -34,7 +37,7 @@ const CtaButtonStyled = styled.a`
 `;
 
 const CtaLabel = styled.span`
-  flex-grow: 1; 
+ flex-grow: 1; 
   text-align: center; 
   margin-right: 0.75rem; 
   
@@ -45,10 +48,10 @@ const CtaLabel = styled.span`
   text-transform: uppercase;
   white-space: nowrap;
 
-  /* ---  Ustawienie line-height na 1 usuwa dodatkowe odstępy fontu --- */
+ 
   line-height: 0.1;
 
-  /* Stan początkowy dla animacji */
+
   opacity: 0;
   transform: translateY(40%); 
   will-change: transform, opacity;
@@ -71,7 +74,8 @@ const CtaIconWrapper = styled.div`
   will-change: transform, opacity;
 `;
 
-const CtaButton = ({ animate, href = "/all-bikes" }) => {
+const CtaButton = ({ animate, to = "/all-bikes" }) => { 
+  const { t } = useTranslation();
   const gsap = window.gsap;
 
   const ctaWrapperRef = useRef(null); 
@@ -79,10 +83,7 @@ const CtaButton = ({ animate, href = "/all-bikes" }) => {
   const ctaIconRef = useRef(null);    
 
   useEffect(() => {
-    if (!gsap) { 
-      console.error("[CtaButton.jsx] window.gsap not available!"); 
-      return; 
-    }
+    if (!gsap) { return; }
 
     const wrapper = ctaWrapperRef.current;
     const label = ctaLabelRef.current;
@@ -122,11 +123,10 @@ const CtaButton = ({ animate, href = "/all-bikes" }) => {
     }
   }, [animate, gsap]);
 
-  
   return (
     <CtaWrapper ref={ctaWrapperRef}>
-      <CtaButtonStyled href={href}>
-        <CtaLabel ref={ctaLabelRef}>View all products</CtaLabel>
+      <CtaButtonStyled to={to}>
+        <CtaLabel ref={ctaLabelRef}>{t('viewAllProducts')}</CtaLabel>
         <CtaIconWrapper ref={ctaIconRef}><i className="fas fa-arrow-right"></i></CtaIconWrapper>
       </CtaButtonStyled>
     </CtaWrapper>

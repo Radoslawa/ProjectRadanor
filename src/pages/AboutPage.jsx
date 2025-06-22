@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Lenis from 'lenis'; // Do płynnego przewijania
 
 // Importy dla GSAP i jego wtyczek
@@ -124,15 +125,16 @@ const CardDescription = styled.div`
 `;
 // --- Koniec Styled Components ---
 
-const AboutPage = () => { // Usunięto nieużywany prop isAppReady
+const AboutPage = () => { 
+  const { t } = useTranslation();
   const gsap = window.gsap; 
   const aboutWrapperRef = useRef(null);
   
   const cardsData = [
-    { title: "Born From Passion.", description: "Our story doesn't begin in a boardroom; it begins on a dusty trail, with the sun on our backs and the simple, profound joy of the ride.", image: aboutImg1 },
-    { title: "Engineered for the Escape.", description: "We were a group of bike lovers, united by a shared obsession for cycling.", image: aboutImg2 },
-    { title: "So, we decided to build it ourselves.", description: "Our weekends were spent exploring new roads, conquering hills, and pushing our limits.", image: aboutImg3 },
-    { title: "Welcome to our family. Let's ride together.", description: "We believe a bicycle is more than transportation. It’s a source of freedom, a tool for discovery, and a catalyst for community.", image: aboutImg4 },
+       { titleKey: "about_card1_title", descKey: "about_card1_desc", image: aboutImg1 },
+    { titleKey: "about_card2_title", descKey: "about_card2_desc", image: aboutImg2 },
+    { titleKey: "about_card3_title", descKey: "about_card3_desc", image: aboutImg3 },
+    { titleKey: "about_card4_title", descKey: "about_card4_desc", image: aboutImg4 },
   ];
 
   useEffect(() => {
@@ -213,27 +215,27 @@ const AboutPage = () => { // Usunięto nieużywany prop isAppReady
     <AboutPageWrapper ref={aboutWrapperRef}>
       <Navbar animate={true} /> 
       <main>
-        <IntroSection><h1>For Riders, By Riders.</h1></IntroSection>
+        <IntroSection><h1>{t('about_intro_title')}</h1></IntroSection>
         <CardsSection>
           {cardsData.map((card, index) => (
             <Card key={index} className="about-card">
               <CardWrapper>
                 <CardImageWrapper className="card-img-wrapper">
-                  <img src={card.image} alt={card.title} />
+                  <img src={card.image} alt={t(card.titleKey)} />
                 </CardImageWrapper>
                 <CardContent>
                   <CardTitle>
-                    <h1 className="card-title-h1">{card.title}</h1>
+                    <h1 className="card-title-h1">{t(card.titleKey)}</h1>
                   </CardTitle>
                   <CardDescription className="card-description">
-                    <p>{card.description}</p>
+                    <p>{t(card.descKey)}</p>
                   </CardDescription>
                 </CardContent>
               </CardWrapper>
             </Card>
           ))}
         </CardsSection>
-        <IntroSection className="outro"><h1>Engineered for the Escape</h1></IntroSection>
+        <IntroSection className="outro"><h1>{t('about_outro_title')}</h1></IntroSection>
       </main>
       <Footer animate={true} /> 
     </AboutPageWrapper>

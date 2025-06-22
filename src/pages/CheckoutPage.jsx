@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import { db } from '../firebase';
@@ -27,6 +28,10 @@ const MainContent = styled.main`
   margin: 0 auto;
   padding: 120px 2rem 4rem;
   color: ${({ theme }) => theme.colors.black || '#000'};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tabletS || '768px'}) {
+    padding: 100px 1rem 2rem; 
+  }
 `;
 
 const Title = styled.h1`
@@ -34,8 +39,13 @@ const Title = styled.h1`
   font-family: ${({ theme }) => theme.fonts.main};
   margin-bottom: 2rem;
   text-align: center;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.grey || '#ddd'};
+  border-bottom: 1px solid #ddd;
   padding-bottom: 1rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tabletS || '768px'}) {
+    font-size: 2rem; 
+    margin-bottom: 1.5rem;
+  }
 `;
 
 const CheckoutForm = styled.form`
@@ -45,15 +55,20 @@ const CheckoutForm = styled.form`
   align-items: start;
 
   @media (max-width: 900px) {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* ZMIANA: Jedna kolumna na mniejszych ekranach */
+    gap: 2rem; 
   }
 `;
 
 const FormSection = styled.div`
-  background-color: ${({ theme }) => theme.colors.white || '#fff'};
+  background-color: #fff;
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tabletS || '768px'}) {
+    padding: 1.5rem; 
+  }
 `;
 
 const InnerFormLayout = styled.div`
@@ -66,6 +81,11 @@ const SectionTitle = styled.h2`
   font-size: 1.5rem;
   margin-top: 0;
   margin-bottom: 1.5rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tabletS || '768px'}) {
+    font-size: 1.3rem; 
+    margin-bottom: 1rem;
+  }
 `;
 
 const InputGroup = styled.div`
@@ -76,49 +96,49 @@ const InputGroup = styled.div`
 const Label = styled.label`
   font-size: 0.9rem;
   margin-bottom: 0.4rem;
-  color: ${({ theme }) => theme.colors.darkGrey || '#555'};
+  color: #555;
 
   &.required::after {
     content: ' *';
-    color: ${({ theme }) => theme.colors.attention || 'red'};
+    color: red;
   }
 `;
 
 const Input = styled.input`
   padding: 0.8em 1em;
-  border: 1px solid ${({ theme }) => theme.colors.grey || '#ccc'};
+  border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1rem;
   font-family: inherit;
   
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors.primary || '#0a0a0a'};
+    border-color: #0a0a0a;
   }
 `;
 
 const Select = styled.select`
   padding: 0.8em 1em;
-  border: 1px solid ${({ theme }) => theme.colors.grey || '#ccc'};
+  border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1rem;
   font-family: inherit;
   background-color: white;
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.primary || '#0a0a0a'};
-  }
 `;
 
 const OrderSummary = styled.div`
   padding: 2rem;
-  background-color: ${({ theme }) => theme.colors.white || '#fff'};
+  background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   align-self: flex-start;
   position: sticky;
-  top: 120px;
+  top: 120px; 
+
+  @media (max-width: 900px) {
+    position: static; /* ZMIANA: Usunięcie "przyklejenia" na mobilnych */
+    margin-top: 2rem; 
+  }
 `;
 
 const SummaryRow = styled.div`
@@ -140,14 +160,14 @@ const PlaceOrderButton = styled.button`
   display: block;
   width: 100%;
   text-align: center;
-  background-color: ${({ theme }) => theme.colors.primary || '#0a0a0a'};
-  color: ${({ theme }) => theme.colors.white || '#fff'};
+  background-color: #0a0a0a;
+  color: #fff;
   border: none;
   padding: 0.9em 1.5em;
   font-size: 1rem;
   font-weight: 500;
   text-transform: uppercase;
-  border-radius: 15px;
+  border-radius: 25px;
   cursor: pointer;
   margin-top: 1.5rem;
   transition: background-color 0.3s ease, opacity 0.3s ease;
@@ -158,7 +178,7 @@ const PlaceOrderButton = styled.button`
   }
 
   &:hover:not(:disabled) {
-    background-color: ${({ theme }) => theme.colors.secondary || '#303030'};
+    background-color: #303030;
   }
 `;
 
@@ -174,7 +194,9 @@ const CheckboxGroup = styled.div`
   }
 `;
 
+
 const CheckoutPage = () => {
+  const { t } = useTranslation();
   const { cartItems, clearCart } = useCart();
   const { currentUser } = useAuth();
   const navigate = useNavigate();
@@ -183,7 +205,7 @@ const CheckoutPage = () => {
     fullname: '', address: '', city: '', postalCode: '', country: 'Germany',
     cardNumber: '', cardName: '', expiryDate: '', cvc: '',
   });
-  const [loading, setLoading] = useState(true);
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const [saveAddress, setSaveAddress] = useState(true);
 
   const loadUserData = useCallback(async () => {
@@ -202,10 +224,11 @@ const CheckoutPage = () => {
         }));
       }
     }
-    setLoading(false);
   }, [currentUser]);
 
-  useEffect(() => { loadUserData(); }, [loadUserData]);
+  useEffect(() => { 
+    loadUserData(); 
+  }, [loadUserData]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -224,7 +247,7 @@ const CheckoutPage = () => {
     e.preventDefault();
     if (!currentUser || cartItems.length === 0) return;
 
-    setLoading(true);
+    setIsPlacingOrder(true);
 
     if (saveAddress) {
       const userDocRef = doc(db, "users", currentUser.uid);
@@ -237,9 +260,17 @@ const CheckoutPage = () => {
       } catch (err) { console.error("Error updating address:", err); }
     }
 
+    
     const newOrder = {
       userId: currentUser.uid,
-      items: cartItems,
+      items: cartItems.map(item => ({
+        id: item.id,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        currency: item.currency,
+        size: item.size || null
+      })),
       totalCost: totalCost,
       shippingAddress: {
         fullname: formData.fullname, address: formData.address,
@@ -251,13 +282,14 @@ const CheckoutPage = () => {
 
     try {
       await addDoc(collection(db, "orders"), newOrder);
-      clearCart();
-      navigate('/order-success');
+      clearCart(); 
+      navigate('/order-success'); 
     } catch (error) {
       console.error("Error placing order: ", error);
       alert("There was an error placing your order. Please try again.");
+    } finally {
+      setIsPlacingOrder(false);
     }
-    setLoading(false);
   };
 
   const europeanCountries = [ "Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden", "United Kingdom" ];
@@ -266,74 +298,76 @@ const CheckoutPage = () => {
     <CheckoutPageWrapper>
       <Navbar animate={true} variant="light" />
       <MainContent>
-        <Title>Checkout</Title>
+        <Title>{t('checkout_title')}</Title>
         <CheckoutForm id="checkout-form" onSubmit={handlePlaceOrder}>
           <FormSection>
             <InnerFormLayout>
-              <SectionTitle>Shipping Address</SectionTitle>
+              <SectionTitle>{t('shipping_address_title')}</SectionTitle>
               <InputGroup>
-                <Label htmlFor="fullname" className="required">Full Name</Label>
+                <Label htmlFor="fullname" className="required">{t('fullname_label')}</Label>
                 <Input type="text" id="fullname" name="fullname" value={formData.fullname} onChange={handleChange} required />
               </InputGroup>
               <InputGroup>
-                <Label htmlFor="address" className="required">Address & Street Nr.</Label>
+                <Label htmlFor="address" className="required">{t('address_label')}</Label>
                 <Input type="text" id="address" name="address" value={formData.address} onChange={handleChange} required />
               </InputGroup>
               <InputGroup>
-                <Label htmlFor="city" className="required">City</Label>
+                <Label htmlFor="city" className="required">{t('city_label')}</Label>
                 <Input type="text" id="city" name="city" value={formData.city} onChange={handleChange} required />
               </InputGroup>
               <InputGroup>
-                <Label htmlFor="postalCode" className="required">Postal Code</Label>
+                <Label htmlFor="postalCode" className="required">{t('postal_code_label')}</Label>
                 <Input type="text" id="postalCode" name="postalCode" value={formData.postalCode} onChange={handleChange} required />
               </InputGroup>
               <InputGroup>
-                <Label htmlFor="country" className="required">Country</Label>
+                <Label htmlFor="country" className="required">{t('country_label')}</Label>
                 <Select id="country" name="country" value={formData.country} onChange={handleChange} required>
                   {europeanCountries.map(country => ( <option key={country} value={country}>{country}</option> ))}
                 </Select>
               </InputGroup>
               <CheckboxGroup>
                 <input type="checkbox" id="saveAddress" name="saveAddress" checked={saveAddress} onChange={handleChange} />
-                <label htmlFor="saveAddress">Save this address for future purchases</label>
+                <label htmlFor="saveAddress">{t('save_address_label')}</label>
               </CheckboxGroup>
 
-              <SectionTitle style={{ marginTop: '2rem' }}>Payment Information</SectionTitle>
+              <SectionTitle style={{ marginTop: '2rem' }}>{t('payment_info_title')}</SectionTitle>
               <InputGroup>
-                <Label htmlFor="cardName" className="required">Name on Card</Label>
-                <Input type="text" id="cardName" name="cardName" value={formData.cardName} onChange={handleChange}  />
+                <Label htmlFor="cardName" className="required">{t('card_name_label')}</Label>
+                <Input type="text" id="cardName" name="cardName" value={formData.cardName} onChange={handleChange} />
               </InputGroup>
               <InputGroup>
-                <Label htmlFor="cardNumber" className="required">Card Number</Label>
+                <Label htmlFor="cardNumber" className="required">{t('card_number_label')}</Label>
                 <Input type="text" id="cardNumber" name="cardNumber" placeholder="•••• •••• •••• ••••" value={formData.cardNumber} onChange={handleChange} />
               </InputGroup>
               <div style={{ display: 'flex', gap: '1rem' }}>
                 <InputGroup style={{ flex: '1' }}>
-                  <Label htmlFor="expiryDate" className="required">Expiry Date</Label>
-                  <Input type="text" id="expiryDate" name="expiryDate" placeholder="MM / YY" value={formData.expiryDate} onChange={handleChange} />
+                  <Label htmlFor="expiryDate" className="required">{t('expiry_date_label')}</Label>
+                  <Input type="text" id="expiryDate" name="expiryDate" placeholder="MM / YY" value={formData.expiryDate} onChange={handleChange}  />
                 </InputGroup>
                 <InputGroup style={{ flex: '1' }}>
-                  <Label htmlFor="cvc" className="required">CVC</Label>
-                  <Input type="text" id="cvc" name="cvc" placeholder="•••" value={formData.cvc} onChange={handleChange} />
+                  <Label htmlFor="cvc" className="required">{t('cvc_label')}</Label>
+                  <Input type="text" id="cvc" name="cvc" placeholder="•••" value={formData.cvc} onChange={handleChange}  />
                 </InputGroup>
               </div>
             </InnerFormLayout>
           </FormSection>
           <OrderSummary>
-            <SectionTitle>Order Summary</SectionTitle>
+            <SectionTitle>{t('order_summary_title')}</SectionTitle>
             <SummaryRow>
-              <span>Subtotal</span>
+              <span>{t('subtotal_label')}</span>
               <span>{totalCost.toFixed(2)} {cartItems[0]?.currency || 'EUR'}</span>
             </SummaryRow>
             <SummaryRow>
-              <span>Shipping</span>
+              <span>{t('shipping_label')}</span>
               <span>FREE</span>
             </SummaryRow>
             <SummaryRow className="total">
-              <span>Total</span>
+              <span>{t('total_label')}</span>
               <span>{totalCost.toFixed(2)} {cartItems[0]?.currency || 'EUR'}</span>
             </SummaryRow>
-            <PlaceOrderButton type="submit" form="checkout-form" disabled={loading}>{loading ? 'Placing Order...' : 'Place Order'}</PlaceOrderButton>
+            <PlaceOrderButton type="submit" form="checkout-form" disabled={isPlacingOrder}>
+              {isPlacingOrder ? t('placing_order_button') : t('place_order_button')}
+            </PlaceOrderButton>
           </OrderSummary>
         </CheckoutForm>
       </MainContent>

@@ -1,7 +1,6 @@
 // src/data/allBikesData.js
 
-// KROK 1: Importujemy tylko kilka obrazków, co do których mamy pewność, że istnieją.
-// Upewnij się, że te pliki istnieją w Twoim projekcie.
+
 import gravelHero from '../assets/images/bikes/gravel/heroGravel.jpg';
 import gravelWhite from '../assets/images/bikes/gravel/Gravel-white2.jpg';
 import gravelWhite2 from '../assets/images/bikes/gravel/Gravel-white3.jpg';
@@ -53,15 +52,14 @@ import racingImg1 from '../assets/images/img1.jpg';
 
 
 
-// KROK 2: Uproszczona lista rowerów do celów naprawczych.
-// Będziesz mogła dodać resztę później, gdy aplikacja będzie stabilna.
+
 export const allBikesData = [
   {
     id: 1,
     name: "Gravel Pathfinder Pro",
     category: "Gravel",
     mainImage: gravelHero,
-    galleryImage: [gravelHero, gravelWhite, gravelWhite2, gravelWhite3],
+    galleryImages: [gravelHero, gravelWhite, gravelWhite2, gravelWhite3],
     "description": "Discover unknown trails with the Gravel Pathfinder Pro. Designed for adventurers who aren't afraid to stray from the beaten path. This bike combines lightness, durability, and versatility to provide you with unforgettable experiences on every trip, regardless of the terrain.",
   "features": [
     "Ultra-light Monocoque carbon frame with Gravel Advanced geometry",

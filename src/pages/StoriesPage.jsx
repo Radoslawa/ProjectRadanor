@@ -1,7 +1,7 @@
 // src/pages/StoriesPage.jsx
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-
+import { useTranslation } from 'react-i18next'; 
 import { ScrollTrigger } from 'gsap/all';
 
 import Navbar from '../components/common/Navbar';
@@ -146,6 +146,7 @@ const TextBlock = styled.div`
 `;
 
 const StoriesPage = () => {
+  const { t } = useTranslation();
   const gsap = window.gsap;
   const pageWrapperRef = useRef(null);
   
@@ -191,35 +192,33 @@ const StoriesPage = () => {
       <Navbar animate={true} variant="dark" /> 
       
       <main>
-        {/* --- JEDNA SEKCJA Z ANIMACJĄ --- */}
         <PinnedSection className="story-pin-section">
           <StickyContainer className="story-sticky-container">
             <StoryImageWrapper>
               <img src={storyImage} alt="RadanOr Bike Story" className="story-image-main" />
             </StoryImageWrapper>
             <OverlayText className="story-overlay-text">
-              <h2>More than just commuting</h2>
-              <cite>Julia M. – Commuter from Hamburg</cite>
+              <h2>{t('stories_title1')}</h2>
+              <cite>{t('stories_author1')}</cite>
             </OverlayText>
           </StickyContainer>
         </PinnedSection>
 
-        {/* --- JEDNA SEKCJA Z TREŚCIĄ POD SPODEM --- */}
         <AfterScrollContent>
           <TextBlock>
             <blockquote>
-              "The commute to work used to be stressful. Since I got the UrbanBike 5, my day starts with fresh air instead of honking cars. It's become my personal morning ritual."
+              "{t('stories_quote1')}"
             </blockquote>
-            <h3>Why it's so convincing:</h3>
+            <h3>{t('stories_reasons_title')}</h3>
             <ul>
-              <li>Stylish & lightweight – perfect for the city</li>
-              <li>Fast, maneuverable, with a smart lighting system</li>
-              <li>Suitable for everyday use + low maintenance</li>
+              <li>{t('stories_reason1')}</li>
+              <li>{t('stories_reason2')}</li>
+              <li>{t('stories_reason3')}</li>
             </ul>
-            <a href="#" className="story-link">👉 For those who want more from their commute.</a>
+            <a href="#" className="story-link">{t('stories_link1')}</a>
             
-            <h2 style={{marginTop: "4rem"}}>At home on any trail</h2>
-            <cite>– Mountain Bike</cite>
+            <h2 style={{marginTop: "4rem"}}>{t('stories_title2')}</h2>
+            <cite>{t('stories_author2')}</cite>
           </TextBlock>
         </AfterScrollContent>
       </main>

@@ -2,6 +2,7 @@
 import React, { forwardRef, useRef, useImperativeHandle } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom'; 
+import { useTranslation } from 'react-i18next';
 
 const SlideWrapper = styled(Link)`
   display: block; 
@@ -82,6 +83,7 @@ const SlideDescription = styled.p`
 `;
 
 const Slide = forwardRef(({ slideData }, ref) => {
+  const { t } = useTranslation();
   const containerRef = useRef(null);
   const bgImageWrapperRef = useRef(null);
   const mainImageWrapperRef = useRef(null);
@@ -98,10 +100,10 @@ const Slide = forwardRef(({ slideData }, ref) => {
 
   if (!slideData) return null; 
 
-  const displayTitle = slideData.title || 'Featured Bike';
-  const displayDescription = slideData.description || 'Check out our latest collection!';
+  const displayTitle = t(slideData.titleKey, 'Featured Bike');
+  const displayDescription = t(slideData.descriptionKey, 'Check out our latest collection!');
   const mainImageSrc = slideData.image; 
-  const altText = slideData.altText || displayTitle; 
+  const altText = displayTitle; 
 
   let categoryLink = '/all-bikes';
   if (slideData.category) {
@@ -130,7 +132,8 @@ const Slide = forwardRef(({ slideData }, ref) => {
         </SlideDescriptionWrapper>
       </SlideCopy>
     </SlideWrapper>
-  );
+
+);
 });
 
 export default Slide;
