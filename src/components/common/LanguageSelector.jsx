@@ -96,7 +96,7 @@ const LanguageSelector = () => {
     { code: 'fr', name: '🇫🇷 FR' },
     { code: 'es', name: '🇪🇸 ES' },
    
-    { code: 'pl', name: '🇵🇱 PL' }
+    
   ];
 
   // Funkcja do zmiany języka

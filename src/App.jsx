@@ -35,12 +35,12 @@ import LoaderOverlay from './components/LoaderOverlay.jsx';
 // Importy GSAP
 import gsap from 'gsap';
 import { CustomEase } from 'gsap/CustomEase';
-import { ScrollTrigger } from 'gsap/ScrollTrigger'; // <--- DODAJEMY BRAKUJĄCY IMPORT
+import { ScrollTrigger } from 'gsap/ScrollTrigger'; 
 
-// --- POPRAWKA: Rejestrujemy WSZYSTKIE potrzebne wtyczki ---
+
 if (typeof window !== "undefined") {
   window.gsap = gsap;
-  gsap.registerPlugin(CustomEase, ScrollTrigger); // <--- ZAREJESTROWANO ScrollTrigger
+  gsap.registerPlugin(CustomEase, ScrollTrigger); 
   if (!CustomEase.get("hop")) CustomEase.create("hop", "0.9, 0, 0.1, 1");
   if (!CustomEase.get("custom")) CustomEase.create("custom", ".87,0,.13,1");
 }
