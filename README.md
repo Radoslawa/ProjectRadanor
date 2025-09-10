@@ -68,25 +68,7 @@ To run this project locally, follow these steps:
     npm install
     ```
 
-3.  **Set up your Firebase configuration:**
-    * Create a `firebase.js` file in the `src/` directory.
-    * Paste your Firebase project configuration into this file. You can get this from your Firebase project settings in the console.
-    ```javascript
-    // src/firebase.js
-    import { initializeApp } from "firebase/app";
-    import { getAuth } from "firebase/auth";
-    import { getFirestore } from "firebase/firestore";
 
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      // ...and so on
-    };
-
-    const app = initializeApp(firebaseConfig);
-    export const auth = getAuth(app);
-    export const db = getFirestore(app);
-    ```
 
 4.  **Run the development server:**
     ```bash
